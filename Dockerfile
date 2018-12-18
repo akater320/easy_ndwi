@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y \
     gdal-bin=2.3.2+dfsg-2~bionic0 \
     libgdal-dev=2.3.2+dfsg-2~bionic0 \
     python3-pip
+RUN export CPLUS_INCLUDE_PATH=/usr/include/gdal
+RUN export C_INCLUDE_PATH=/usr/include/gdal
 RUN python3 -m pip install gdal
     
 # Copy and set permissions    
