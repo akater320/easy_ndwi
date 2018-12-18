@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     python3-pip
 RUN export CPLUS_INCLUDE_PATH=/usr/include/gdal
 RUN export C_INCLUDE_PATH=/usr/include/gdal
-RUN python3 -m pip install gdal
+RUN python3 -m pip install gdal numpy
     
 # Copy and set permissions    
 COPY . /var/lib/ndwi
