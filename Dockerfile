@@ -7,5 +7,7 @@ RUN echo "deb http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu bioni
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6B827C12C2D425E227EDCA75089EBE08314DF160
 RUN apt-get update && apt-get install -y \
     gdal-bin=2.3.2+dfsg-2~bionic0
+    
+COPY . /var/lib/ndwi
 
 CMD ["echo", "This image has no default start command."]
