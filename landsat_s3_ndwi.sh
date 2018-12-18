@@ -38,7 +38,9 @@ L8_THRESHOLD=$(python otsu.py $L8_NDWI_FILE | grep -oP 'THRESHOLD:\K[0-9\.]+')
 echo 'Threshold:='$L8_THRESHOLD
 
 L8_DETECTION_FILE=$L8_OUT_DIR/'detection.shp'
+echo 'Extracting contours...'
 gdal_contour -fl $L8_THRESHOLD $L8_NDWI_FILE $L8_DETECTION_FILE
+echo 'Contours done'
 
 
 #Remove temp directory?
