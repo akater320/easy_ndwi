@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#!/bin/bash
 
 # $1 - Landsat scene name
 export GDAL_CACHEMAX=128
