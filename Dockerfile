@@ -6,7 +6,10 @@ WORKDIR /var/lib/ndwi
 RUN echo "deb http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu bionic main" >> /etc/apt/sources.list
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6B827C12C2D425E227EDCA75089EBE08314DF160
 RUN apt-get update && apt-get install -y \
-    gdal-bin=2.3.2+dfsg-2~bionic0
+    gdal-bin=2.3.2+dfsg-2~bionic0 \
+    libgdal-dev=2.3.2+dfsg-2~bionic0 \
+    python3-pip
+RUN python3 -m pip install gdal
     
 # Copy and set permissions    
 COPY . /var/lib/ndwi
