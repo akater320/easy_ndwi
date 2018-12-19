@@ -34,8 +34,8 @@ L8_NDWI_FILE=$L8_OUT_DIR/$L8_NAME"_ndwi.tif"
 gdal_calc.py -A $L8_BAND1_INTERMEDIATE -B $L8_BAND2_INTERMEDIATE --outfile=$L8_NDWI_FILE --type=Float64 --overwrite --calc='logical_and(A!=0,B!=0)*10000.0*(A-B)/(A+B)'
 
 echo 'Calculating OSTU threshold...'
-L8_THRESHOLD=$(python otsu.py $L8_NDWI_FILE | grep -oP 'THRESHOLD:\K[0-9\.]+')
-echo 'Threshold:='$L8_THRESHOLD
+L8_THRESHOLD=$(python otsu.py $L8_NDWI_FILE | grep -oP 'THRESHOLD:\K\-?[0-9\.]+')
+echo 'Threshold='$L8_THRESHOLD
 
 L8_DETECTION_FILE=$L8_OUT_DIR/'detection.shp'
 echo 'Extracting contours...'
