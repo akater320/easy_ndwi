@@ -2,16 +2,13 @@ FROM cloudfoundry/cflinuxfs3
 
 WORKDIR /var/lib/ndwi
 
-# Add GIS Repository and install GDAL
-RUN echo "deb http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu bionic main" >> /etc/apt/sources.list
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6B827C12C2D425E227EDCA75089EBE08314DF160
-RUN apt-get update && apt-get install -y \
-    gdal-bin=2.3.2+dfsg-2~bionic0 \
-    libgdal-dev=2.3.2+dfsg-2~bionic0 \
-    python3-pip
-RUN export CPLUS_INCLUDE_PATH=/usr/include/gdal
-RUN export C_INCLUDE_PATH=/usr/include/gdal
-RUN python3 -m pip install gdal numpy
+# Install GDAL environment with Conda
+ENV PATH="/root/miniconda3/bin:$PATH"
+RUN curl -L https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o miniconda.sh && \
+    /bin/bash miniconda.sh -b -p $HOME/miniconda3 && \
+    rm miniconda.sh && \
+    conda config --add channels conda-forge && \
+    conda install -c conda-forge gdal
     
 # Copy and set permissions    
 COPY . /var/lib/ndwi
