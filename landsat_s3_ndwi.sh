@@ -4,6 +4,8 @@
 export GDAL_CACHEMAX=128
 export AWS_NO_SIGN_REQUEST=YES
 
+L8_SCRIPT_DIR=$(dirname $0)
+
 L8_NAME=$1
 #Extract the WRS Path and Row from the scene name.
 L8_PATH=$(grep -oP '^LC08_[[:alnum:]]{4}_\K[[:digit:]]{3}(?=[[:digit:]]{3}_20)' <<< $L8_NAME)
@@ -33,8 +35,8 @@ echo "Download done."
 L8_NDWI_FILE=$L8_OUT_DIR/$L8_NAME"_ndwi.tif"
 gdal_calc.py -A $L8_BAND1_INTERMEDIATE -B $L8_BAND2_INTERMEDIATE --outfile=$L8_NDWI_FILE --type=Float64 --overwrite --calc='logical_and(A!=0,B!=0)*10000.0*(A-B)/(A+B)'
 
-echo 'Calculating OSTU threshold...'
-L8_THRESHOLD=$(python3 otsu.py $L8_NDWI_FILE | grep -oP 'THRESHOLD:\K[0-9\.]+')
+echo 'Calculating OTSU threshold...'
+L8_THRESHOLD=$(python3 $L8_SCRIPT_DIR/otsu.py $L8_NDWI_FILE | grep -oP 'THRESHOLD:\K[0-9\.]+')
 echo 'Threshold:='$L8_THRESHOLD
 
 L8_DETECTION_FILE=$L8_OUT_DIR/'detection.shp'
