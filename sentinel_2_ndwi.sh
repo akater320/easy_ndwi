@@ -5,9 +5,11 @@ export GDAL_CACHEMAX=128
 
 S2_SEARCH_TOKEN=$1
 
+S2_SCRIPT_DIR=$(dirname $0)
+
 #TODO: Check for the index file and download if necessary.
 #https://storage.googleapis.com/gcp-public-data-sentinel-2/index.csv.gz
-S2_INDEX_LINE=$(gzip -d -c index.csv.gz | grep -P -m1 $S2_SEARCH_TOKEN)
+S2_INDEX_LINE=$(gzip -d -c $S2_SCRIPT_DIR/index.csv.gz | grep -P -m1 $S2_SEARCH_TOKEN)
 #echo 'Line='$S2_INDEX_LINE
 echo $S2_INDEX_LINE
 
@@ -68,8 +70,8 @@ echo "Download done."
 S2_NDWI_FILE=$S2_OUT_DIR/$S2_GRANULE_ID"_ndwi.tif"
 gdal_calc.py -A $S2_BAND1_INTERMEDIATE -B $S2_BAND2_INTERMEDIATE --outfile=$S2_NDWI_FILE --type=Float64 --overwrite --calc='logical_and(A!=0,B!=0)*10000.0*(A-B)/(A+B)'
 
-echo 'Calculating OSTU threshold...'
-S2_THRESHOLD=$(python otsu.py $S2_NDWI_FILE | grep -oP 'THRESHOLD:\K\-?[0-9\.]+')
+echo 'Calculating OTSU threshold...'
+S2_THRESHOLD=$(python $S2_SCRIPT_DIR/otsu.py $S2_NDWI_FILE | grep -oP 'THRESHOLD:\K\-?[0-9\.]+')
 echo 'Threshold:='$S2_THRESHOLD
 
 S2_DETECTION_FILE=$S2_OUT_DIR/'detection.shp'
