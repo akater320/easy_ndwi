@@ -54,6 +54,7 @@ layer1.CreateField(ogr.FieldDefn( "product_id", ogr.OFTString))
 layer1.CreateField(ogr.FieldDefn( "cloud_cover", ogr.OFTReal))
 layer1.CreateField(ogr.FieldDefn("sensing_date", ogr.OFTDateTime))
 layer1.CreateField(ogr.FieldDefn("mgrs_tile", ogr.OFTString))
+layer1.CreateField(ogr.FieldDefn("base_url", ogr.OFTString))
 
 featureDefn = layer1.GetLayerDefn()
 
@@ -89,6 +90,7 @@ with gzip.open('index.csv.gz', 'rt') as f:
         feature.SetField("cloud_cover", granule.CLOUD_COVER)
         feature.SetField("sensing_date", granule.SENSING_TIME.strftime(date_format))
         feature.SetField("mgrs_tile", granule.MGRS_TILE)
+        feature.SetField("base_url", granule.BASE_URL)
         layer1.CreateFeature(feature)
         feature=None
 
