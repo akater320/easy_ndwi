@@ -9,6 +9,16 @@ import re
 
 date_format="%Y-%m-%dT%H:%M:%S.%fZ"
 
+def parseDateTime(timeString:str):
+    return datetime(
+        year=int(timeString[0:4]),
+        month=int(timeString[5:7]),
+        day=int(timeString[8:10]),
+        hour=int(timeString[11:13]),
+        minute=int(timeString[14:16]),
+        second=int(timeString[17:19])
+        )
+
 class Granule(NamedTuple): 
     GRANULE_ID: str
     PRODUCT_ID: str
@@ -30,11 +40,11 @@ def parseRecord(line):
     #tokens=re.split(r'[\,]', line)
     return Granule(
         *tokens[0:4], 
-        datetime.strptime(tokens[4], date_format), 
+        parseDateTime(tokens[4]), #datetime.strptime(tokens[4], date_format), 
         tokens[5],
         float(tokens[6]),
         tokens[7],  
-        datetime.strptime(tokens[8], date_format), 
+        parseDateTime(tokens[8]), #datetime.strptime(tokens[8], date_format), 
         *map(float, tokens[9:13]),
         tokens[13])
 

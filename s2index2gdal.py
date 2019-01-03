@@ -17,9 +17,9 @@ class BBox:
         return (self._minx < other._maxx and self._maxx > other._minx) and \
         (self._miny < other._maxy and self._maxy > other._miny)
 
-def processInput(filterFunc, maxGranules:int, bands, outfiles):
+def processInput(inputfiles, filterFunc, maxGranules:int, bands, outfiles):
     numberWritten = 0
-    for line in fileinput.input(files=["-"]):
+    for line in fileinput.input(inputfiles):
         if maxGranules > 0 and numberWritten >= maxGranules:
             print("*********Break********")
             break
@@ -50,6 +50,7 @@ def parseArgs():
         type=argparse.FileType('wt', encoding='UTF-8'))
     parser.add_argument('-m', '--max', type=int, default=-1, help="Maximum number of granules to write. Default is all.")
     parser.add_argument('-a', '--age', type=int, nargs=2, default=[0, 10000], help="Min and Max age in days.")
+    parser.add_argument('-i', '--inputfile', help="A CSV file. Default is stdin.", default="-")
     args = parser.parse_args()
 
     if len(args.bands) != len(args.outfiles):
@@ -69,7 +70,7 @@ def parseArgs():
         spatialBbox.intersects(BBox(granule.WEST_LON, granule.SOUTH_LAT, granule.EAST_LON, granule.NORTH_LAT)) 
 
     print(repr(args))
-    processInput(filter, args.max, args.bands, args.outfiles)
+    processInput([args.inputfile], filter, args.max, args.bands, args.outfiles)
 
 if __name__=="__main__":
     parseArgs()
